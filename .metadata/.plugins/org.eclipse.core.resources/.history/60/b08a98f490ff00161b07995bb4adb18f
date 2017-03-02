@@ -1,0 +1,7 @@
+package com.henry.sandpiles;
+
+import javax.swing.JPanel;
+
+public class InputPanel extends JPanel {
+
+}

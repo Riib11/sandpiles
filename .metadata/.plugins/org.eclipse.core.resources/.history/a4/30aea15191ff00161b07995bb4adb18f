@@ -1,0 +1,11 @@
+package com.henry.sandpiles;
+
+import javax.swing.JFormattedTextField;
+import javax.swing.JPanel;
+
+public class InputPanel extends JPanel {
+
+	public InputPanel() {
+		JFormattedTextField inputNumber = new JFormattedTextField();
+	}
+}

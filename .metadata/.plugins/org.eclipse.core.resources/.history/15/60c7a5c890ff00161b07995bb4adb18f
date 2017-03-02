@@ -1,0 +1,39 @@
+package com.henry.sandpiles;
+
+import java.awt.GridLayout;
+
+import javax.swing.JFrame;
+
+public class Main {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		JFrame frame = new JFrame("Sandpiles Display");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GridLayout gridlayout = new GridLayout(1,0);
+		
+		Display display = new Display();
+		
+		frame.getContentPane().add(display);
+		frame.setResizable(false);
+		frame.pack();
+		frame.setVisible(true);
+
+		// public Sandpile(int x, boolean infinite, int type, boolean logging,
+		// Display d, int delayms)
+		Sandpile sp = new Sandpile(60, true, 4, false, display, 1);
+
+		sp.normalize();
+		sp.display();
+
+		// print("");
+		//
+		// sp.setAllPiles(3);
+		// sp.print();
+	}
+
+	static void print(String s) {
+		System.out.println(s);
+	}
+
+}

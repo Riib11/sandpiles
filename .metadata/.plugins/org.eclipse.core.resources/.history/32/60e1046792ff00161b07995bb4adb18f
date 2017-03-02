@@ -1,0 +1,113 @@
+package com.henry.sandpiles;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+@SuppressWarnings("serial")
+public class Display extends JPanel {
+
+	int panelSize = 700;
+
+	// private static Color color0 = new Color(0, 0, 0, 150);
+	// private static Color color1 = new Color(36, 36, 36, 150);
+	// private static Color color2 = new Color(73, 73, 73, 150);
+	// private static Color color3 = new Color(109, 109, 109, 150);
+	// private static Color color4 = new Color(146, 146, 146, 150);
+	// private static Color color5 = new Color(182, 182, 182, 150);
+	// private static Color color6 = new Color(218, 218, 218, 150);
+	// private static Color colorOVER = new Color(255, 255, 255, 150);
+
+	private static Color color0 = Color.WHITE;
+	private static Color color1 = Color.RED;
+	private static Color color2 = Color.ORANGE;
+	private static Color color3 = Color.YELLOW;
+	private static Color color4 = Color.GREEN;
+	private static Color color5 = Color.BLUE;
+	private static Color color6 = new Color(128, 0, 128, 150);
+	private static Color colorOVER = Color.BLACK;
+
+	/*
+	 * private static Color color0 = new Color(255, 255, 255, 150); // white = 0
+	 * private static Color color1 = new Color(238, 130, 238, 150); // violet =
+	 * 1 private static Color color2 = new Color(0, 0, 255, 150); // blue = 2
+	 * private static Color color3 = new Color(0, 128, 0, 150); // green = 3
+	 * private static Color color4 = new Color(255, 255, 0, 150); // yellow = 4
+	 * private static Color color5 = new Color(255, 165, 0, 150); // orange = 5
+	 * private static Color color6 = new Color(255, 0, 0, 150); // red = 6
+	 * private static Color colorOVER = new Color(0, 0, 0, 150); // black > 6
+	 */
+
+	private double pileSize;
+	private Sandpile sp;
+
+	public Display() {
+
+	}
+
+	public void paintSandpile(Sandpile sp) {
+		pileSize = panelSize / sp.size;
+		this.sp = sp;
+
+		this.repaint();
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.clearRect(0, 0, panelSize, panelSize);
+
+		Color c = color0;
+		
+		System.out.println(sp);
+
+		System.out.println("Size: " + sp.size);
+
+		for (int x = 0; x < sp.size; x++) {
+			for (int y = 0; y < sp.size; y++) {
+				int v = sp.getPile(x, y);
+				if (v == 0) {
+					c = color0;
+				} else if (v == 1) {
+					c = color1;
+				} else if (v == 2) {
+					c = color2;
+				} else if (v == 3) {
+					c = color3;
+				} else if (v == 4) {
+					c = color4;
+				} else if (v == 5) {
+					c = color5;
+				} else if (v == 6) {
+					c = color6;
+				} else if (v > 6) {
+					c = colorOVER;
+				}
+
+				g.setColor(c);
+				int pl = (int) pileSize;
+
+				g.fillRect(x * pl, y * pl, pl, pl);
+			}
+		}
+
+		// g.setColor(Color.black);
+		// g.drawString("white = 0", 0, 12 * 1);
+		// g.drawString("violet = 1", 0, 12 * 2);
+		// g.drawString("blue = 2", 0, 12 * 3);
+		// g.drawString("green = 3", 0, 12 * 4);
+		// g.drawString("yellow = 4", 0, 12 * 5);
+		// g.drawString("orange = 5", 0, 12 * 6);
+		// g.drawString("red = 6", 0, 12 * 7);
+		// g.drawString("black > 6", 0, 12 * 8);
+	}
+
+	public Dimension getPreferredSize() {
+		return new Dimension(panelSize, panelSize);
+	}
+
+	public Dimension getMinimumSize() {
+		return getPreferredSize();
+	}
+}
