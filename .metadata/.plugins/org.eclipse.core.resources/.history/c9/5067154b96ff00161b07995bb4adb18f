@@ -22,7 +22,7 @@ public class InputPanel extends JPanel {
 		inputFormat.setParseIntegerOnly(true);
 
 		inputNumber = new JFormattedTextField(inputFormat);
-		inputNumber.setValue(new Double(100));
+		inputNumber.setValue(new Double(10));
 		inputNumber.setColumns(5);
 
 		log = new JLabel();

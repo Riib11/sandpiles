@@ -21,9 +21,9 @@ public class Display extends JPanel {
 	// private static Color colorOVER = new Color(255, 255, 255, 150);
 
 	private static Color color0 = Color.WHITE;
-	private static Color color1 = Color.YELLOW;
+	private static Color color1 = Color.RED;
 	private static Color color2 = Color.ORANGE;
-	private static Color color3 = Color.RED;
+	private static Color color3 = Color.YELLOW;
 	private static Color color4 = Color.GREEN;
 	private static Color color5 = Color.BLUE;
 	private static Color color6 = new Color(128, 0, 128, 150);

@@ -1,0 +1,235 @@
+package com.henry.sandpiles;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+public class Sandpile {
+
+	boolean infinite;
+	int size; // vertical is y, horizontal is x
+	int type;
+
+	boolean logging = true;
+
+	ArrayList<ArrayList<Integer>> content;
+
+	public ArrayList<Sandpile> history;
+
+	Display display;
+
+	public int delayms;
+
+	public Sandpile(int x, boolean infinite, int type, boolean logging,
+			Display d, int delayms) throws InterruptedException {
+		this.type = type;
+		this.infinite = infinite;
+		this.size = 1;
+		this.history = new ArrayList<Sandpile>();
+		this.display = d;
+		this.logging = logging;
+		this.delayms = delayms;
+		this.content = new ArrayList<ArrayList<Integer>>();
+		this.content.add(new ArrayList<Integer>());
+		this.content.get(0).add(0);
+
+		if (infinite) {
+			setPile(0, 0, x); // set the one and only pile to be the given value
+			this.print();
+			this.history.add(this.copy());
+			normalize();
+		} else {
+			while (size < x) { // starts at 1, then expands to the given size.
+								// Size effectively has to be odd
+				this.expand();
+			}
+		}
+	}
+
+	private Sandpile() {
+
+	}
+
+	// makes a sandpile that just has content
+	private Sandpile copy() {
+		Sandpile sp = new Sandpile();
+		sp.content = this.content;
+		sp.size = this.size;
+		return sp;
+	}
+
+	public void setPile(int x, int y, int v) {
+		this.content.get(x).set(y, v);
+	}
+
+	public int getPile(int x, int y) {
+		return this.content.get(x).get(y);
+	}
+
+	public void setAllPiles(int v) {
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
+				setPile(x, y, v);
+			}
+		}
+	}
+
+	public void addToPile(int x, int y, int v) {
+		this.setPile(x, y, this.getPile(x, y) + v);
+	}
+
+	public void addToAllPiles(int v) {
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
+				setPile(x, y, this.getPile(x, y));
+			}
+		}
+	}
+
+	// increases the size by 2
+	// all added piles are initially 0
+	public void expand() {
+		ArrayList<ArrayList<Integer>> nc = new ArrayList<ArrayList<Integer>>();
+
+		// generate all piles, each being 0
+		for (int x = 0; x < this.size + 2; x++) {
+			nc.add(new ArrayList<Integer>());
+			for (int y = 0; y < this.size + 2; y++) {
+				nc.get(x).add(0);
+			}
+		}
+
+		// print("Size of nc: " + nc.size() + "," + nc.get(0).size());
+
+		// all inner piles (not on immediate edge)
+		for (int x = 1; x < this.size + 1; x++) {
+			for (int i = 1; i < this.size + 1; i++) {
+				// adds all original content
+				nc.get(x).set(i, this.content.get(x - 1).get(i - 1));
+			}
+		}
+
+		this.content = nc;
+
+		this.size += 2;
+	}
+
+	public boolean normalize() throws InterruptedException {
+		if (this.infinite) { // see if border needs to be expanded
+			boolean expansionNeeded = false;
+
+			if (this.size >= 2) {
+				// check side columns
+				for (int y = 0; y < this.size; y++) {
+					if (this.getPile(0, y) >= type
+							|| this.getPile(this.size - 1, y) >= this.type) {
+						expansionNeeded = true;
+					}
+				}
+
+				// check top and bottom rows
+				for (int x = 1; x < this.size - 1; x++) {
+					if (this.getPile(x, 0) >= type
+							|| this.getPile(x, this.size - 1) >= this.type) {
+						expansionNeeded = true;
+					}
+				}
+
+				if (expansionNeeded) {
+					this.expand();
+				}
+			} else { // there is only one pile
+				if (this.getPile(0, 0) >= this.type)
+					this.expand();
+			}
+		}
+
+		// topple piles >= type
+		if (this.infinite) {
+			for (int x = 1; x < size - 1; x++) {
+				for (int y = 1; y < size - 1; y++) {
+					if (this.getPile(x, y) >= type) {
+						// subtract 4 from overflowing pile
+						this.addToPile(x, y, -4);
+
+						// surrounding 4 piles get 1 each
+						this.addToPile(x - 1, y, 1);
+						this.addToPile(x + 1, y, 1);
+						this.addToPile(x, y - 1, 1);
+						this.addToPile(x, y + 1, 1);
+					}
+				}
+			}
+		} else {
+			for (int x = 0; x < size; x++) {
+				for (int y = 0; y < size; y++) {
+					if (this.getPile(x, y) >= type) {
+						// subtract 4 from overflowing pile
+						this.addToPile(x, y, -4);
+
+						// surrounding 4 piles get 1 each (if existent)
+						if (x - 1 > 0)
+							this.addToPile(x - 1, y, 1);
+						if (x + 2 < size)
+							this.addToPile(x + 1, y, 1);
+						if (y - 1 < 0)
+							this.addToPile(x, y - 1, 1);
+						if (y + 2 < size)
+							this.addToPile(x, y + 1, 1);
+					}
+				}
+			}
+		}
+
+		// check to see if further normalization is needed
+		boolean needToNormalize = false;
+		for (int x = 0; x < size; x++) {
+			for (int y = 0; y < size; y++) {
+				if (this.getPile(x, y) >= type) {
+					needToNormalize = true;
+				}
+			}
+		}
+
+		if (needToNormalize) {
+			this.print();
+			this.history.add(this.copy());
+			try {
+				normalize();
+			} catch (StackOverflowError soe) {
+				return false;
+			}
+		} else {
+			this.history.add(this.copy());
+		}
+
+		return true;
+
+	}
+
+	public void print() {
+		if (logging) {
+			for (int y = 0; y < this.size; y++) {
+				for (int x = 0; x < this.size; x++) {
+
+					printOnLine(this.getPile(x, y) + " ");
+				}
+				print(""); // line return at the end of each row
+			}
+		}
+	}
+
+	public void display() throws InterruptedException {
+		for (Sandpile s : this.history) {
+			display.paintSandpile(s);
+			 Thread.sleep(this.delayms);
+		}
+	}
+
+	void print(String s) {
+		System.out.println(s);
+	}
+
+	void printOnLine(String s) {
+		System.out.print(s);
+	}
+}

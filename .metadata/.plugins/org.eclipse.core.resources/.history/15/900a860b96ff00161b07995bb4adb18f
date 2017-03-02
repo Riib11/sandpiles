@@ -31,8 +31,8 @@ public class Main {
 
 		JLabel c0 = new JLabel("0: White");
 		JLabel c1 = new JLabel("1: Yellow");
-		JLabel c2 = new JLabel("2: Orange");
-		JLabel c3 = new JLabel("3: Red");
+		JLabel c2 = new JLabel("0: Orange");
+		JLabel c3 = new JLabel("0: Red");
 
 		legend.add(c0);
 		legend.add(c1);

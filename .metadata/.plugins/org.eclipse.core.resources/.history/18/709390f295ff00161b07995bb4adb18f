@@ -28,18 +28,15 @@ public class Main {
 		JPanel legend = new JPanel();
 		GridLayout gridlayout1 = new GridLayout(0, 1);
 		legend.setLayout(gridlayout1);
-
-		JLabel c0 = new JLabel("0: White");
+	JLabel c0 = new JLabel("0: White");
 		JLabel c1 = new JLabel("1: Yellow");
-		JLabel c2 = new JLabel("2: Orange");
-		JLabel c3 = new JLabel("3: Red");
+		JLabel c2 = new JLabel("0: Orange");
+		JLabel c3 = new JLabel("0: Red");
 
 		legend.add(c0);
 		legend.add(c1);
 		legend.add(c2);
 		legend.add(c3);
-
-		frame.add(legend);
 
 		frame.setResizable(false);
 		frame.pack();

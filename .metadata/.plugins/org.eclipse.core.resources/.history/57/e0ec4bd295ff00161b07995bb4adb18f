@@ -1,7 +1,6 @@
 package com.henry.sandpiles;
 
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,20 +25,17 @@ public class Main {
 		frame.add(display);
 
 		JPanel legend = new JPanel();
-		GridLayout gridlayout1 = new GridLayout(0, 1);
-		legend.setLayout(gridlayout1);
-
 		JLabel c0 = new JLabel("0: White");
 		JLabel c1 = new JLabel("1: Yellow");
-		JLabel c2 = new JLabel("2: Orange");
-		JLabel c3 = new JLabel("3: Red");
-
-		legend.add(c0);
-		legend.add(c1);
-		legend.add(c2);
-		legend.add(c3);
-
-		frame.add(legend);
+		JLabel c2 = new JLabel("0: Orange");
+		JLabel c3 = new JLabel("0: Red");
+		
+		/*
+		 * private static Color color0 = Color.WHITE;
+	private static Color color1 = Color.YELLOW;
+	private static Color color2 = Color.ORANGE;
+	private static Color color3 = Color.RED;
+		 */
 
 		frame.setResizable(false);
 		frame.pack();
